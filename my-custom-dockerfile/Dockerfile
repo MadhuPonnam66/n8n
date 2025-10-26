@@ -9,18 +9,18 @@ WORKDIR /usr/src/app
 # Installing build dependencies
 RUN apk add --no-cache git python3 make g++ tzdata
 
+# Copying dependency files
+
+COPY ./pnpm-lock.yaml ./pnpm-workspace.yaml ./package.json ./
+COPY patches ./patches
+COPY scripts ./scripts
 
 # Enabling corepack to install with pnpm instead of npm
 
 RUN corepack enable
 
-
-
-# Copying dependency files
-
-COPY ./pnpm-lock.yaml ./pnpm-workspace.yaml ./package.json ./patches/ ./
-
-
+#skipping setup tasks
+ENV CI=true
 
 # Installing dependencies using pnpm
 
