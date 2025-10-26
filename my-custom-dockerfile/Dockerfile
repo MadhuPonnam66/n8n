@@ -1,7 +1,7 @@
 # ===============================
 # Stage 1: Build n8n from source n8n cloned repo
 # ===============================
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 # setting  working directory
 WORKDIR /usr/src/app
@@ -18,7 +18,7 @@ RUN corepack enable
 
 # Copying dependency files
 
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json patches ./
 
 
 
@@ -35,7 +35,7 @@ RUN pnpm run build
 # ===============================
 # Stage 2: Create runtime image
 # ===============================
-FROM node:20-alpine
+FROM node:22-alpine
 
 # Create non-root user for security
 RUN addgroup -S n8n && adduser -S n8n -G n8n
