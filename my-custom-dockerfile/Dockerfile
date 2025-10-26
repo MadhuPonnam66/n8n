@@ -9,14 +9,28 @@ WORKDIR /usr/src/app
 # Installing build dependencies
 RUN apk add --no-cache git python3 make g++ tzdata
 
+
+# Enabling corepack to install with pnpm instead of npm
+
+RUN corepack enable
+
+
+
+# Copying dependency files
+
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+
+
+
+# Installing dependencies using pnpm
+
+RUN pnpm install --frozen-lockfile
+
 # Copying source code into the container
 COPY . .
 
-# Install dependencies (for all packages)
-RUN npm ci
-
-# Build all packages (CLI included)
-RUN npm run build
+# Build all packages
+RUN pnpm run build
 
 # ===============================
 # Stage 2: Create runtime image
