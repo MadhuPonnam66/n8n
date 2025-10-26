@@ -18,7 +18,7 @@ RUN corepack enable
 
 # Copying dependency files
 
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json patches ./
+COPY ./pnpm-lock.yaml ./pnpm-workspace.yaml ./package.json ./patches ./
 
 
 
