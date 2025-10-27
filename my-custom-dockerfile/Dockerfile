@@ -14,6 +14,7 @@ RUN apk add --no-cache git python3 make g++ tzdata
 COPY ./pnpm-lock.yaml ./pnpm-workspace.yaml ./package.json ./
 COPY patches ./patches
 COPY scripts ./scripts
+COPY turbo.json ./
 
 # Enabling corepack to install with pnpm instead of npm
 
@@ -24,7 +25,11 @@ ENV CI=true
 
 # Installing dependencies using pnpm
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --recursive --frozen-lockfile
+RUN pnpm --recursive rebuild
+RUN cd packages/@n8n/json-schema-to-zod && pnpm install && pnpm run build || true
+RUN cd packages/@n8n/stylelint-config && pnpm install && pnpm run build || true
+RUN pnpm run build
 
 # Copying source code into the container
 COPY . .
